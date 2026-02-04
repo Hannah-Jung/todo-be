@@ -6,6 +6,7 @@ const taskSchema = Schema(
     task: {
       type: String,
       required: true,
+      trim: true,
     },
     isComplete: {
       type: Boolean,

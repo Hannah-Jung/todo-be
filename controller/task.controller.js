@@ -7,18 +7,18 @@ taskController.createTask = async (req, res) => {
     const { task, isComplete } = req.body;
     const newTask = new Task({ task, isComplete });
     await newTask.save();
-    res.status(200).json({ status: "OK", data: newTask });
+    res.status(200).json({ status: "success", data: newTask });
   } catch (err) {
-    res.status(400).json({ status: "Failed", error: err });
+    res.status(400).json({ status: "fail", error: err });
   }
 };
 
 taskController.getTask = async (req, res) => {
   try {
-    const taskList = await Task.find({}).select("-__v");
-    res.status(200).json({ status: "OK", data: taskList });
+    const taskList = await Task.find({}).sort("-createdAt").select("-__v");
+    res.status(200).json({ status: "success", data: taskList });
   } catch (err) {
-    res.status(400).json({ status: "Failed", error: err });
+    res.status(400).json({ status: "fail", error: err });
   }
 };
 
@@ -29,7 +29,9 @@ taskController.updateTask = async (req, res) => {
       runValidators: true,
     });
     if (!updatedTask) {
-      return res.status(404).json({ message: "Task not found" });
+      return res
+        .status(404)
+        .json({ status: "fail", message: "Task not found" });
     }
 
     res.status(200).json({ status: "success", data: updatedTask });
