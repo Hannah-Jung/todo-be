@@ -24,10 +24,21 @@ taskController.getTask = async (req, res) => {
 
 taskController.updateTask = async (req, res) => {
   try {
-    const updatedTask = await Task.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const updateData = { ...req.body };
+
+    if (req.body.task !== undefined) {
+      updateData.lastTextEditedAt = new Date();
+    }
+
+    const updatedTask = await Task.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
     if (!updatedTask) {
       return res
         .status(404)

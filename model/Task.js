@@ -12,6 +12,10 @@ const taskSchema = Schema(
       type: Boolean,
       required: true,
     },
+    lastTextEditedAt: {
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true },
 );
