@@ -18,25 +18,25 @@ userController.createUser = async (req, res) => {
     ) {
       return res.status(400).json({
         status: "Failed to create a new account",
-        error: "Email, name, and password are required.",
+        error: "Email, name, and password are required",
       });
     }
     const emailRegex = /^(?!\.)(?!.*\.@)[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(emailNorm)) {
       return res.status(400).json({
         status: "Failed to create a new account",
-        error: "Invalid email format.",
+        error: "Invalid email format",
       });
     }
     if (password.trim().length < 4) {
       return res.status(400).json({
         status: "Failed to create a new account",
-        error: "Password must be at least 4 characters.",
+        error: "Password must be at least 4 characters",
       });
     }
     const user = await User.findOne({ email: emailNorm });
     if (user) {
-      throw new Error("This account already exists.");
+      throw new Error("This account already exists");
     }
 
     const salt = bcryptjs.genSaltSync(saltRounds);
@@ -73,6 +73,22 @@ userController.loginWithEmail = async (req, res) => {
       }
     }
     throw new Error("Invalid email or password");
+  } catch (error) {
+    res.status(400).json({
+      status: "Failed",
+      error: error.message || "Something went wrong",
+    });
+  }
+};
+
+userController.getUser = async (req, res) => {
+  try {
+    const { userId } = req;
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("Cannot find user");
+    }
+    res.status(200).json({ status: "Success", user });
   } catch (error) {
     res.status(400).json({
       status: "Failed",
