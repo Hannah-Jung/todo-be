@@ -2,18 +2,6 @@ const Task = require("../model/Task");
 
 const taskController = {};
 
-// taskController.createTask = async (req, res) => {
-//   try {
-//     const { task, isComplete } = req.body;
-//     const { userId } = req;
-//     const newTask = new Task({ task, isComplete, author: userId });
-//     await newTask.save();
-//     res.status(200).json({ status: "success", data: newTask });
-//   } catch (err) {
-//     res.status(400).json({ status: "fail", error: err });
-//   }
-// };
-
 taskController.createTask = async (req, res) => {
   try {
     const { task, isComplete, createdAt, lastTextEditedAt } = req.body;
@@ -26,9 +14,9 @@ taskController.createTask = async (req, res) => {
       ...(lastTextEditedAt && { lastTextEditedAt: new Date(lastTextEditedAt) }),
     });
     await newTask.save();
-    res.status(200).json({ status: "success", data: newTask });
+    res.status(200).json({ status: "Success", data: newTask });
   } catch (err) {
-    res.status(400).json({ status: "fail", error: err });
+    res.status(400).json({ status: "Fail", error: err });
   }
 };
 
@@ -38,9 +26,9 @@ taskController.getTask = async (req, res) => {
       .populate("author")
       .sort("-createdAt")
       .select("-__v");
-    res.status(200).json({ status: "success", data: taskList });
+    res.status(200).json({ status: "Success", data: taskList });
   } catch (err) {
-    res.status(400).json({ status: "fail", error: err });
+    res.status(400).json({ status: "Fail", error: err });
   }
 };
 
@@ -67,18 +55,18 @@ taskController.updateTask = async (req, res) => {
         .json({ status: "fail", message: "Task not found" });
     }
 
-    res.status(200).json({ status: "success", data: updatedTask });
+    res.status(200).json({ status: "Success", data: updatedTask });
   } catch (error) {
-    res.status(400).json({ status: "fail", error });
+    res.status(400).json({ status: "Fail", error });
   }
 };
 
 taskController.deleteTask = async (req, res) => {
   try {
     const deleteTask = await Task.findByIdAndDelete(req.params.id);
-    res.status(200).json({ status: "success", data: deleteTask });
+    res.status(200).json({ status: "Success", data: deleteTask });
   } catch (error) {
-    res.status(400).json({ status: "fail", error });
+    res.status(400).json({ status: "Fail", error });
   }
 };
 

@@ -15,7 +15,6 @@ authController.authenticate = (req, res, next) => {
         throw new Error("Invalid token");
       }
       req.userId = payload._id;
-      // res.status(200).json({ status: "Success", userId: payload._id });
     });
     next();
   } catch (error) {
